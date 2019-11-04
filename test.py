@@ -149,9 +149,7 @@ class Calculator:
 		output = []
 		precedence = {'+':1, '-':1, '*':2, '/':2, '^':3}
 		infix = " ".join(txt.split())
-		infix = infix.split(' ')
 		for i in infix:
-			i = i.strip()
 			if self.isNumber(i):
 				if isinstance(i, int):
 					output.append(str(i)+'.0')
@@ -161,7 +159,7 @@ class Calculator:
 				postStack.push(i)
 			elif i == ')':
 				top = postStack.pop()
-				while top != '(':
+				while (top != '(') and (not postStack.isEmpty()):
 					output.append(top)
 					top = postStack.pop()
 			elif i == ' ':
