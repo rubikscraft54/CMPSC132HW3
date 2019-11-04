@@ -211,7 +211,7 @@ class Calculator:
 			return 'error message'
 
 
-"""
+
 	@property
 	def calculate(self):
 		'''
@@ -267,6 +267,35 @@ class Calculator:
 			return None
 
 		calcStack=Stack()
-
-		# YOUR CODE STARTS HERE
-"""
+		postfix_expr = self.postfix(self.expr)
+		postfix_expr = postfix_expr.split()
+		for i in postfix_expr:
+			if self.isNumber(i):
+				calcStack.push(i)
+			elif i == '^':
+				num1= calcStack.pop()
+				num2= calcStack.pop()
+				result= float(num2) ** float(num1)
+				calcStack.push(result)
+			elif i == '*':
+				num1= calcStack.pop()
+				num2= calcStack.pop()
+				result = float(num1) * float(num2)
+				calcStack.push(result)
+			elif i == '/':
+				num1= calcStack.pop()
+				num2= calcStack.pop()
+				result = float(num2) / float(num1)
+				calcStack.push(result)
+			elif i == '-':
+				num1= calcStack.pop()
+				num2= calcStack.pop()
+				result = float(num2) - float(num1)
+				calcStack.push(result)
+			elif i == '+':
+				num1= calcStack.pop()
+				num2= calcStack.pop()
+				result= float(num2) + float(num1)
+				calcStack.push(result)
+		value =  calcStack.pop()
+		return value
