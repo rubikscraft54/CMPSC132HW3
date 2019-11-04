@@ -95,6 +95,7 @@ class Stack:
 class Calculator:
 	def __init__(self):
 		self.expr = None
+		self._calculate = None
 
 
 	def isNumber(self, txt):
@@ -190,24 +191,23 @@ class Calculator:
 			output.append(postStack.pop())
 		return " ".join(output)
 
-
+	#propery method 
 	@property
 	def calculate(self):
 		if not isinstance(self.expr,str) or len(self.expr)<=0:
 			print("Argument error in calculate")
 			return None
+		#initalize statck
 		calcStack=Stack()
-		return self._calculate
-
-	@calculate.setter
-	def calculate(self, value):
-
-		calcStack=Stack()
+		#converts infix expr to postfix notation
 		postfix_expr = Calculator().postfix(self.expr)
-		print(postfix_expr)
+		##seperate values in expression into a list
 		for i in postfix_expr:
+			#if value is a digit, push to stack
 			if i in "0123456789":
 				calcStack.push(i)
+			#if value is one of the following operators, pop 2 recent digits
+			#then perform calucation, then push result to stack
 			elif i == '^':
 				num1= calcStack.pop()
 				num2= calcStack.pop()
@@ -233,12 +233,10 @@ class Calculator:
 				num2= calcStack.pop()
 				result= float(num2) + float(num1)
 				calcStack.push(result)
-		value =  calcStack.pop()
-		self.calculate = value
+		#returns final calcuated result 
+		self._calculate =  calcStack.pop()
+		return self._calculate
 		
 
-x=Calculator
-x.expr='    4  +      3 -2'
-x.calculate()
 
        
