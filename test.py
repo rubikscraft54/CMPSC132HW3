@@ -6,6 +6,7 @@ Team members:
 Collaboration Statement:             
 
 '''
+import re
 
 class Node:
 	def __init__(self, value):
@@ -148,9 +149,22 @@ class Calculator:
 		postStack=Stack()
 		output = []
 		precedence = {'+':1, '-':1, '*':2, '/':2, '^':3}
-		infix = " ".join(txt.split())
+		splitTxt = re.split('([-+*/()^])', txt)
+		infix = []
+		for x in splitTxt:
+			x = x.strip()
+			if x in '-+*/()^':
+				infix.append(x)
+			else:
+				try:
+					y = float(x)
+					infix.append(x)
+				except ValueError:
+					continue
+		infix = ' '.join(infix).split()
 		for i in infix:
 			if self.isNumber(i):
+				i = float(i)
 				if isinstance(i, int):
 					output.append(str(i)+'.0')
 				else:
