@@ -162,33 +162,53 @@ class Calculator:
 				except ValueError:
 					continue
 		infix = ' '.join(infix).split()
-		for i in infix:
-			if self.isNumber(i):
-				i = float(i)
-				if isinstance(i, int):
-					output.append(str(i)+'.0')
-				else:
-					output.append(str(float(i)))
-			elif i == '(':
-				postStack.push(i)
-			elif i == ')':
-				top = postStack.pop()
-				while (top != '(') and (not postStack.isEmpty()):
-					output.append(top)
-					top = postStack.pop()
-			elif i == ' ':
-				pass
+		num_oprnd = 0
+		num_oprtr = 0
+		prnts = ''
+		for n in infix:
+			if self.isNumber(n):
+				num_oprnd += 1
+			elif n in '-+*/^':
+				num_oprtr += 1
+			elif n in '()':
+				prnts += n
 			else:
-				try:
-					while (not postStack.isEmpty()) and (precedence[i] <= precedence[postStack.peek()]):
-						output.append(postStack.pop())
-				except KeyError:
-					pass
-				finally:
+				continue
+		for l in range(len(prnts)):
+			prnts = prnts.replace('()', '')
+		if len(infix) > 0 and infix[0] == '-':
+			num_oprtr -= 1
+		if prnts == '' and (num_oprnd == num_oprtr + 1):
+			if infix[0] == '-':
+				infix[1] = '-' + infix[1]
+				infix = infix[1:]
+			for i in infix:
+				if self.isNumber(i):
+					i = float(i)
+					if isinstance(i, int):
+						output.append(str(i)+'.0')
+					else:
+						output.append(str(float(i)))
+				elif i == '(':
 					postStack.push(i)
-		while not postStack.isEmpty():
-			output.append(postStack.pop())
-		return " ".join(output)
+				elif i == ')':
+					top = postStack.pop()
+					while (top != '(') and (not postStack.isEmpty()):
+						output.append(top)
+						top = postStack.pop()
+				else:
+					try:
+						while (not postStack.isEmpty()) and (precedence[i] <= precedence[postStack.peek()]):
+							output.append(postStack.pop())
+					except KeyError:
+						pass
+					finally:
+						postStack.push(i)
+			while not postStack.isEmpty():
+				output.append(postStack.pop())
+			return " ".join(output)
+		else:
+			return 'error message'
 
 
 """
